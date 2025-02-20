@@ -1,0 +1,38 @@
+
+<!-- historial.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Préstamos</title>
+   
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+
+</head>
+<body>
+    <a style="position: fixed; left: 10px;" href="/">Volver</a>
+    <h1>Historial de Préstamos</h1>
+    <table>
+        <tr>
+            <th>Imagen</th>
+            <th>Objeto</th>
+            <th>Prestado a</th>
+            <th>Cédula</th>
+            <th>Fecha de Préstamo</th>
+            <th>Fecha de Devolución</th>
+        </tr>
+        {% for h in historial %}
+        <tr>
+            <td><img width="40" src="data:image/jpeg;base64,{{ h.imagen }}" alt="{{ h.objeto }}"></td>
+            <td>{{ h.objeto }}</td>
+            <td>{{ h.nombre }}</td>
+            <td>{{ h.documento }}</td>
+            <td>{{ h.fecha_prestamo }}</td>
+            <td>{{ h.fecha_devolucion if h.fecha_devolucion else 'No devuelto' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+   
+</body>
+</html>

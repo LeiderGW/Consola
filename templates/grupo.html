@@ -1,0 +1,37 @@
+<!-- grupo.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ grupo.nombre }}</title>
+   
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+    <a href="/">Volver</a>
+    <h1>{{ grupo.nombre }}</h1>
+    <img width="40" src="data:image/jpeg;base64,{{ grupo.imagen }}" alt="{{ grupo.objeto }}">
+    <ul>
+        {% for objeto in grupo.objetos %}
+        <li>
+            <strong>{{ objeto.nombre }}</strong> - {{ objeto.estado }}
+            {% if objeto.estado == "Disponible" %}
+                <form action="/prestar_objeto/{{ grupo.id }}/{{ objeto.id }}" method="post">
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                    <input type="text" name="documento" placeholder="Documento" required>
+                    <button type="submit">Prestar</button>
+                </form>
+            {% else %}
+                <p>Prestado a: {{ objeto.prestamos[-1].nombre }} el {{ objeto.prestamos[-1].fecha_prestamo }}</p>
+                <form action="/devolver_objeto/{{ grupo.id }}/{{ objeto.id }}" method="post">
+                    <button type="submit">Devolver</button>
+                </form>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
