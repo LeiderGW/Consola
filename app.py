@@ -1,18 +1,23 @@
-from flask import Flask, render_template, request, session
-import random
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
-app.secret_key = "clave_secreta_unica"
+nombres = []
 
-@app.route("/", methods=["GET", "POST"])
+@app.route('/')
 def index():
-    if "color" not in session:
-        session["color"] = "#000000"  # Color predeterminado (negro)
+    return render_template('index.html')
 
-    if request.method == "POST":
-        session["color"] = request.form["color"]  # Guarda el color en la sesión
+@app.route('/agregar', methods=['POST'])
+def agregar_nombre():
+    nombre = request.json.get('nombre')
+    if nombre:
+        nombres.append(nombre)
+        return jsonify({"mensaje": "Nombre agregado"})
+    return jsonify({"error": "No se recibió un nombre"}), 400
 
-    return render_template("index.html", color=session["color"])
+@app.route('/mostrar', methods=['GET'])
+def mostrar_nombres():
+    return jsonify(nombres)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)

@@ -3,28 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selecciona un color</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        .circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: {{ color }};
-            margin: 20px auto;
-        }
-    </style>
+    <title>Lista de Nombres</title>
 </head>
 <body>
-    <h1>Selecciona un color</h1>
-    <div class="circle"></div>
-    
-    <form method="POST">
-        <input type="color" name="color" value="{{ color }}">
-        <button type="submit">Cambiar Color</button>
-    </form>
+    <h2>Agregar y Mostrar Nombres</h2>
+    <input type="text" id="nombre" placeholder="Ingrese un nombre">
+    <button onclick="agregarNombre()">Agregar</button>
+    <button onclick="mostrarNombres()">Mostrar Nombres</button>
+    <ul id="listaNombres"></ul>
+
+    <script>
+        function agregarNombre() {
+            let nombre = document.getElementById("nombre").value;
+            fetch('/agregar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({nombre: nombre})
+            }).then(response => response.json()).then(data => alert(data.mensaje));
+        }
+
+        function mostrarNombres() {
+            fetch('/mostrar')
+            .then(response => response.json())
+            .then(data => {
+                let lista = document.getElementById("listaNombres");
+                lista.innerHTML = "";
+                data.forEach(nombre => {
+                    let li = document.createElement("li");
+                    li.textContent = nombre;
+                    lista.appendChild(li);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
